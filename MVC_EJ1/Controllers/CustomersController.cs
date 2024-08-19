@@ -115,7 +115,7 @@ namespace MVC_EJ1.Controllers
         [ValidateAntiForgeryToken]
         public ActionResult DeleteConfirmed(int id)
         {
-            Customers customers = db.Customers.Find(id);
+            Customers customers = db.Customers.Where(x => x.CustomerID == id && x.IsActive).FirstOrDefault();
             if (customers == null)
             {
                 return HttpNotFound();
@@ -133,6 +133,11 @@ namespace MVC_EJ1.Controllers
                 db.Dispose();
             }
             base.Dispose(disposing);
+        }
+
+        public ActionResult InactiveCustomers()
+        {
+            return View(db.Customers.Where(x => x.IsActive == false).ToList());
         }
     }
 }
